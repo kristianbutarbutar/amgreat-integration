@@ -3,17 +3,22 @@ package com.amgreat.integrator.be;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.amgreat.integrator.cache.CacheManagerInterface;
 import com.amgreat.integrator.cache.LoadTableMapping2Cache;
+import com.amgreat.integrator.cmd.CMDVO;
 import com.amgreat.integrator.util.Utilities;
 import com.amgreat.vo.AttributeVO;
 import com.amgreat.vo.RecordVO;
 import com.amgreat.vo.RequestVO;
+import com.amgreat.vo.StringVO;
+import com.amgreat.vo.TemplateVO;
 
 @Component
 public class FEServices implements FEServicesInterface {
 
 	@Autowired private DataIntegrator dataAPI;
 	@Autowired private CacheIntegrator  cacheAPI;
+	@Autowired private CacheManagerInterface  cacheManagerAPI;
 	@Autowired private LoadTableMapping2Cache loader;
 	
 	@Override
@@ -39,13 +44,11 @@ public class FEServices implements FEServicesInterface {
 					System.out.println("[FEServices.doCmd] Cache failed for single pageId: " + vo.getPageId() );
 			}
 			
-			System.out.println( " 1 call data, tablename = " + (attr!=null && attr.getTabelName()!=null ? attr.getTabelName(): " null") );
-			
 			if( attr != null && attr.getTabelName() != null ) {
 				
-				System.out.println("2 call data, tablename = " + attr.getTabelName() );
-				
 				r = dataAPI.callData( attr );
+				
+				r.setRecordsInString( wrapIntoTemplate( r, vo.getPageId() ) );
 				
 				Utilities.printResponse( r );
 			}
@@ -55,6 +58,25 @@ public class FEServices implements FEServicesInterface {
 			Utilities.printAttributes( tcache );
 		}
 		return r;
+	}
+	
+	private StringVO wrapIntoTemplate( RecordVO r, String pageId ) {
+		StringVO respond = new StringVO();
+		if( r != null ) {
+			
+			TemplateVO t = new TemplateVO(); t.setId(pageId); t = this.getTemplateById(t);
+			
+			if( t != null ) {
+				respond = new CMDVO().execute( r, t.getTemplate() );
+			}
+		}
+		return respond;
+	}
+	
+	private TemplateVO getTemplateById ( TemplateVO t ) {
+		t.setTemplate("<div class=\"linkparentcss\">[[ReplaceCmd]]<div id=\"[[__ID]]\" class=\"linkcss formatcss\">[[__LABEL]]</div>[[ENDReplaceCmd]]</div>");
+		return t;
+		//return cacheManagerAPI.callCache(t);
 	}
 	
 	private AttributeVO setFilter( RequestVO r, AttributeVO at) {

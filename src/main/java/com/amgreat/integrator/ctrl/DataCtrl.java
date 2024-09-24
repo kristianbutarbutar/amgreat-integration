@@ -11,13 +11,13 @@ import com.amgreat.integrator.cache.LoadTableMapping2Cache;
 import com.amgreat.integrator.data.DataModellingIntf;
 import com.amgreat.vo.RecordVO;
 import com.amgreat.vo.RequestVO;
+import com.amgreat.vo.StringVO;
 
 @RestController
 public class DataCtrl {
 
 	@Autowired
 	private DataIntegratorIntf data;
-	
 	
 	@Autowired
 	private DataModellingIntf dm; 
@@ -40,12 +40,21 @@ public class DataCtrl {
 		return dm.extractDBStructure();
 	}
 	
+	private void printStringVO(StringVO vo) {
+		if(vo!=null && vo.getRows()!=null) {
+			for(int i=0; i<vo.getRows().length; i++) {
+				System.out.println("["+i+"] = " + vo.getRows()[i].getRow());
+			}
+		} else System.out.println(" vo.getRows is null ");
+	}
+	
 	@RequestMapping( "/amgreate/api/int/fe" )
 	public RecordVO getQ( @RequestBody RequestVO request ) {
 		RecordVO r = null;
 		try {
 			if(request != null && request.getPageId() != null && !request.getPageId().trim().equals("")) {
 				r = feAPI.doCmd( request );
+				this.printStringVO(r.getRecordsInString());
 			}
 		} catch (Exception e) {
 			System.out.println("[DataCtrl.getQ]:" + e.getMessage());

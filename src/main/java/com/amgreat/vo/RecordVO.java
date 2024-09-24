@@ -4,7 +4,10 @@ public class RecordVO {
 	private ResponseVO response;
 	private RecordVO next;
 	private StatusVO status;
+	private StringVO recordsInString;
 	private int recNo;
+	public StringVO getRecordsInString() { return recordsInString; }
+	public void setRecordsInString(StringVO recordsInString) { this.recordsInString = recordsInString; }
 	public int getRecNo() { return recNo; }
 	public void setRecNo(int recNo) { this.recNo = recNo; }
 	public StatusVO getStatus() { return status; }
