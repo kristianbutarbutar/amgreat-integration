@@ -75,11 +75,6 @@ public class DataIntegrator implements DataIntegratorIntf{
 			if ( req != null ) {
 				rp = restTemplate.postForObject( dataUri, req, RecordVO.class );
 				
-				//if ( rp != null ) {
-				//	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-				//	String json = ow.writeValueAsString( rp );
-	                // System.out.println("JSON: " + json );
-				//}
             }
 		} catch (Exception e) {
 			System.out.println("DataIntegrator.callData.AttributeVO: " + e.getMessage());

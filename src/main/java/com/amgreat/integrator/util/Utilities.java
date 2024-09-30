@@ -25,10 +25,15 @@ public class Utilities {
     
     public static void printResponse( RecordVO vo) {
     	if( vo != null && vo.getResponse() != null) {
-    		ResponseVO rvo = vo.getResponse();
-    		while ( rvo != null ) {
-    			System.out.println(  (rvo.getName()!=null ? rvo.getName():"") + " / " + (rvo.getLabel()!=null ? rvo.getLabel():"") + " : " + (rvo.getVal()!=null ? rvo.getVal(): "") );
-    			rvo = rvo.getNext();
+    		RecordVO recs = vo; int i = 1;
+    		while( recs != null ) {
+    				ResponseVO rvo = recs.getResponse();
+    				System.out.println("RecordNo["+i+"]");
+	    		while ( rvo != null ) {
+	    			System.out.println(  (rvo.getName()!=null ? rvo.getName():"") + " / " + (rvo.getLabel()!=null ? rvo.getLabel():"") + " : " + (rvo.getVal()!=null ? rvo.getVal(): "") );
+	    			rvo = rvo.getNext();
+	    		}
+	    		recs = recs.getNext(); i++;
     		}
     	}
     }

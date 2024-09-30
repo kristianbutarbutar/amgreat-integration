@@ -21,6 +21,7 @@ public class ParentCmd<T> {
 	}
 	
 	public StringVO executeCmd(String cls, ResponseVO r, String template) {
+		StringVO response = new StringVO();
 		try {
 			String __class = path+cls;
 			
@@ -34,9 +35,9 @@ public class ParentCmd<T> {
 				
 				Method method = classObj.getDeclaredMethod("execute", ResponseVO.class, String.class);
 			
-				StringVO response = (StringVO)method.invoke( classObj.newInstance(), r, template);
+				response = (StringVO)method.invoke( classObj.newInstance(), r, template);
 				
-				System.out.println("response row string : " + response.getRow() );
+				System.out.println("response row string : " + (response != null && response.getRow() != null ? response.getRow() : "NULL" ) );
 				
 				return response;
 				
@@ -57,6 +58,6 @@ public class ParentCmd<T> {
 		} catch (InvocationTargetException e) { 
 			  System.out.println("[ParentCmd.createInstance.InvocationTargetException]: " + e.getMessage() );
 		}
-		return null;
+		return response;
 	}
 }

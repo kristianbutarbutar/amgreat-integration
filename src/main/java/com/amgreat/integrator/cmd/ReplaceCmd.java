@@ -24,7 +24,7 @@ public class ReplaceCmd  extends ParentCmd<ReplaceCmd> implements CMDInterface<R
 					
 					String strVO = this.replace( svo.getRow(), rr.getName().trim().toUpperCase(), rr.getVal().trim() );
 					
-					svo.setRow((strVO != null && !strVO.trim().equals("") ? strVO : svo.getRow() ) );
+					svo.setRow( (strVO != null && !strVO.trim().equals("") ? strVO : svo.getRow() ) );
 					
 					System.out.println("Final Row: " + strVO);
 				}
@@ -40,16 +40,22 @@ public class ReplaceCmd  extends ParentCmd<ReplaceCmd> implements CMDInterface<R
 		System.out.println("in replace: template = " + str + ", src = " + src + ", tar = " + tar);
 		String s = "";
 		if( src != null && tar != null ){
+			
 			String srcc = "[["+ src.trim() +"]]";
+			
 			int idx = str.indexOf( srcc.trim() );
 			if(idx >= 0 ) {
 				s =str.substring(0, idx );
-				System.out.println( "11" + s );
 				s+=tar.trim();
-				System.out.println( "12" + s );
 				s+=str.substring( (idx + srcc.trim().length()), str.trim().length() );
-				System.out.println( "13" + s );
-				return s;
+			}
+			
+			idx = s.indexOf( srcc.trim() );
+			
+			System.out.println("after checked again: " + srcc + " at index = " + idx );
+			
+			if( idx >= 0 ) {
+				return replace( s, src, tar );
 			}
 		}
 		return s;

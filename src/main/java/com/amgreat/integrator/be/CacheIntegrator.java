@@ -20,6 +20,8 @@ public class CacheIntegrator implements CacheIntegratorIntf {
 	@Value("${cache.attribute.uri}")
 	private String cacheAttributeUri;
 	
+	
+	
 	public AttributeVO recordVO2AttributeVO( RequestVO request ) {
 		
 		AttributeVO rq = new AttributeVO();

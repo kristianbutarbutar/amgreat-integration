@@ -48,9 +48,12 @@ public class FEServices implements FEServicesInterface {
 				
 				r = dataAPI.callData( attr );
 				
+				//Utilities.printResponse( r );
+				
+				//System.out.println("get from Database PageId = " +vo.getPageId()+", recordNo = " + r.getRecNo() );
+					
 				r.setRecordsInString( wrapIntoTemplate( r, vo.getPageId() ) );
 				
-				Utilities.printResponse( r );
 			}
 			
 			AttributeVO tcache = attr;
@@ -60,13 +63,22 @@ public class FEServices implements FEServicesInterface {
 		return r;
 	}
 	
+	/**
+	 * Wrap Records into appointed template as a later response to client
+	 * @param r
+	 * @param pageId
+	 * @return
+	 */
 	private StringVO wrapIntoTemplate( RecordVO r, String pageId ) {
 		StringVO respond = new StringVO();
 		if( r != null ) {
 			
-			TemplateVO t = new TemplateVO(); t.setId(pageId); t = this.getTemplateById(t);
+			TemplateVO t = new TemplateVO(); t.setId(pageId); t.setCmdName("s"); t = this.getTemplateById(t);
 			
-			if( t != null ) {
+			if( t != null && t.getTemplate() != null && !t.getTemplate().trim().equals("") ) {
+				
+				// System.out.println("PageId = " +pageId+ ", Template:" + t.getTemplate() );
+				
 				respond = new CMDVO().execute( r, t.getTemplate() );
 			}
 		}
@@ -74,9 +86,7 @@ public class FEServices implements FEServicesInterface {
 	}
 	
 	private TemplateVO getTemplateById ( TemplateVO t ) {
-		t.setTemplate("<div class=\"linkparentcss\">[[ReplaceCmd]]<div id=\"[[__ID]]\" class=\"linkcss formatcss\">[[__LABEL]]</div>[[ENDReplaceCmd]]</div>");
-		return t;
-		//return cacheManagerAPI.callCache(t);
+		return cacheManagerAPI.callCache( t );
 	}
 	
 	private AttributeVO setFilter( RequestVO r, AttributeVO at) {

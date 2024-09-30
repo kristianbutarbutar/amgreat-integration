@@ -6,6 +6,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.amgreat.vo.AttributeVO;
+import com.amgreat.vo.HtmlAddVO;
+import com.amgreat.vo.HtmlButtonVO;
+import com.amgreat.vo.HtmlEditVO;
+import com.amgreat.vo.HtmlSearchVO;
+import com.amgreat.vo.HtmlViewVO;
 import com.amgreat.vo.ListVO;
 import com.amgreat.vo.PageVO;
 import com.amgreat.vo.TemplateVO;
@@ -33,7 +38,7 @@ public class CacheManager implements CacheManagerInterface{
 		TemplateVO rp = null;
 		try {
 			if ( req != null ) {
-				rp = restTemplate.postForObject( cacheListUri, req, TemplateVO.class );
+				rp = restTemplate.postForObject( cacheTemplateUri, req, TemplateVO.class );
             }
 		} catch (Exception e) {
 			System.out.println("DataIntegrator.callData.TemplateVO: " + e.getMessage());
@@ -84,6 +89,36 @@ public class CacheManager implements CacheManagerInterface{
 			System.out.println("DataIntegrator.callData.AttributeVO: " + e.getMessage());
 		}
 		return rp;
+	}
+
+	@Override
+	public PageVO generalCache(HtmlSearchVO o, String cmd) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PageVO generalCache(HtmlAddVO o, String cmd) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PageVO generalCache(HtmlEditVO o, String cmd) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PageVO generalCache(HtmlViewVO o, String cmd) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PageVO generalCache(HtmlButtonVO o, String cmd) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

@@ -24,24 +24,25 @@ public class CMDVO extends ParentCmd<CMDVO> implements CMDInterface<RecordVO>{
 				
 				ResponseVO resvo = rvo.getResponse();
 				
-				resparr[idx] = this.executeCommand( resvo, template, cmdName );
+				StringVO tempVO = this.executeCommand( resvo, template, cmdName );
 				
-				cmdName = resparr[idx].getCmdName();
-				
-				System.out.println("Result Text: " + resparr[idx].getRow() );
-				System.out.println("Result Command: " + cmdName );
-				
-				if( idx <=0 ) {
-					template =  new ReplaceCmd().replace( template, cmdName, " " );
-					template =  new ReplaceCmd().replace( template, "END"+cmdName, " " );
+				if( tempVO!=null && tempVO.getRow()!=null && !tempVO.getRow().trim().equals("") && !tempVO.getRow().trim().equalsIgnoreCase("null") ) {
 					
-					System.out.println("latest template: " + template);
+					resparr[idx] = tempVO;
 					
-					resparr[0].setRow( new ReplaceCmd().replace( resparr[0].getRow(), cmdName, " " ));
-					resparr[0].setRow( new ReplaceCmd().replace( resparr[0].getRow(), "END"+cmdName, " " ));
+					cmdName = resparr[idx].getCmdName();
+					
+					if( idx <=0 ) {
+						template =  new ReplaceCmd().replace( template, cmdName, " " );
+						template =  new ReplaceCmd().replace( template, "END"+cmdName, " " );
+						
+						resparr[0].setRow( new ReplaceCmd().replace( resparr[0].getRow(), cmdName, " " ));
+						resparr[0].setRow( new ReplaceCmd().replace( resparr[0].getRow(), "END"+cmdName, " " ));
+					}
+					
+					idx++;
 				}
-				
-				rvo = rvo.getNext(); idx++;
+				rvo = rvo.getNext(); 
 			}
 			respond.setRows( resparr );
 			
@@ -77,10 +78,7 @@ public class CMDVO extends ParentCmd<CMDVO> implements CMDInterface<RecordVO>{
 			}
 			
 			if( sr != null && sr.length() > 1 ) {
-				
 				row = super.executeCmd( sr, r, t ); row.setCmdName( sr );
-				
-				System.out.println("row string : " + row.getRow() );
 			}
 		}
 		return row;
